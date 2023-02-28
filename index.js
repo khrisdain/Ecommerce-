@@ -1,4 +1,5 @@
 import express from "express";
+import bcrypt from "bcrypt";
 import bodyParser from "body-parser"
 import dotenv from "dotenv";
 import cors from "cors";

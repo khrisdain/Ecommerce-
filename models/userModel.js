@@ -26,6 +26,10 @@ const userSchema = new mongoose.Schema({
     },
 });
 
+userSchema.pre('save', async function (next){
+
+})
+
 mongoose.set("strictQuery", false)
 //Export the model
 const User = mongoose.model('User', userSchema);
