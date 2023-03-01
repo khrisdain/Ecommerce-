@@ -8,9 +8,6 @@ export const createUser = async (req, res) => {
         const newUser =await User.create(req.body) //Object-relational mapping to database /ODM 
         res.json(newUser)
     }else {
-        res.json({
-            msg: "User Already Exists",
-            success: false,
-        }) 
+        throw new Error("User already exists")
     }
 }

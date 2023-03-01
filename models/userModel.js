@@ -1,5 +1,5 @@
 import mongoose from "mongoose";
-
+import bcrypt from 'bcrypt';
 // Declare the Schema of the Mongo model
 const userSchema = new mongoose.Schema({
     firstname:{
@@ -26,8 +26,9 @@ const userSchema = new mongoose.Schema({
     },
 });
 
-userSchema.pre('save', async function (next){
-
+userSchema.pre('save', async function (next){ //pre middleware executes one after another 
+    const salt = await bcrypt.genSaltSync(10);
+    this.password= await bcrypt.hash(this.password, salt)
 })
 
 mongoose.set("strictQuery", false)

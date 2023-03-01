@@ -5,6 +5,7 @@ import dotenv from "dotenv";
 import cors from "cors";
 import dbConnect from "./config/dbConnect.js";
 import authRouter from "./routes/authRouter.js";
+import {notFound, errorHandler} from "./middlewares/errorHandler.js";
 
 dotenv.config();
 const app = express();
@@ -17,8 +18,8 @@ app.use(cors()); //cross origin resource sahring
 
 app.use("/api/user", authRouter)
 
-app.use(notFound);
-app.request(errorHandler)
+//app.use(notFound);
+//app.use(errorHandler)
 
 //Server Listening
 app.listen(PORT, () => {
