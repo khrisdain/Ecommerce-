@@ -18,8 +18,8 @@ app.use(cors()); //cross origin resource sahring
 
 app.use("/api/user", authRouter)
 
-//app.use(notFound);
-//app.use(errorHandler)
+app.use(notFound);
+app.use(errorHandler)
 
 //Server Listening
 app.listen(PORT, () => {

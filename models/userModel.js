@@ -25,13 +25,17 @@ const userSchema = new mongoose.Schema({
         required:true,
     },
 });
+mongoose.set("strictQuery", false)
 
 userSchema.pre('save', async function (next){ //pre middleware executes one after another 
     const salt = await bcrypt.genSaltSync(10);
     this.password= await bcrypt.hash(this.password, salt)
-})
+});
 
-mongoose.set("strictQuery", false)
+userSchema.methods.isPasswordMatch = async function(enteredPassword){
+    return await bcrypt.compare(enteredPassword, this.password)
+}
+
 //Export the model
 const User = mongoose.model('User', userSchema);
 
