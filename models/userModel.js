@@ -32,7 +32,7 @@ userSchema.pre('save', async function (next){ //pre middleware executes one afte
     this.password= await bcrypt.hash(this.password, salt)
 });
 
-userSchema.methods.isPasswordMatch = async function(enteredPassword){
+userSchema.methods.isPasswordMatched = async function(enteredPassword){
     return await bcrypt.compare(enteredPassword, this.password)
 }
 
