@@ -17,5 +17,12 @@ export const createUser = asyncHandler(async (req, res) => {
 export const loginUserControl = asyncHandler( async (req, res) => {
     //param: email and password
     const { email, password } = req.body;
-    console.log(email, password)
+
+    /*Selects User infor for correlation of database info  */
+    const findUser = await User.findOne({ email });
+    if(findUser && await findUser.isPasswordMatched(password)){
+        res.json(findUser)
+    }else{
+        throw new Error("Invalid Credential")
+    }
 });
