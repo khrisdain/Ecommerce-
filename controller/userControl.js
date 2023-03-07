@@ -21,7 +21,13 @@ export const loginUserControl = asyncHandler( async (req, res) => {
     /*Selects User infor for correlation of database info  */
     const findUser = await User.findOne({ email });
     if(findUser && await findUser.isPasswordMatched(password)){
-        res.json(findUser)
+     res.json({
+        id: findUser?._id,
+        firstname: findUser?.firstname,
+        lastname: findUser?.lastname,
+        email: findUser?.email,
+        mobile: findUser?.mobile,
+     })
     }else{
         throw new Error("Invalid Credential")
     }
