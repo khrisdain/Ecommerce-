@@ -1,5 +1,6 @@
 import User from "../models/userModel.js";
 import asyncHandler from "express-async-handler";
+import { generateToken } from "../config/jwtTokens.js"
 
 export const createUser = asyncHandler(async (req, res) => {
     const email = req.body.email;
@@ -22,11 +23,12 @@ export const loginUserControl = asyncHandler( async (req, res) => {
     const findUser = await User.findOne({ email });
     if(findUser && await findUser.isPasswordMatched(password)){
      res.json({
-        id: findUser?._id,
+        _id: findUser?._id,
         firstname: findUser?.firstname,
         lastname: findUser?.lastname,
         email: findUser?.email,
         mobile: findUser?.mobile,
+        token: generateToken(findUser?._id)
      })
     }else{
         throw new Error("Invalid Credential")
