@@ -2,6 +2,7 @@ import User from "../models/userModel.js";
 import asyncHandler from "express-async-handler";
 import { generateToken } from "../config/jwtTokens.js"
 
+//CREATE A NEW USER
 export const createUser = asyncHandler(async (req, res) => {
     const email = req.body.email;
     const findUser = await User.findOne({email: email});
@@ -15,6 +16,7 @@ export const createUser = asyncHandler(async (req, res) => {
 });
 
 
+//LOGIN A USER
 export const loginUserControl = asyncHandler( async (req, res) => {
     //param: email and password
     const { email, password } = req.body;
@@ -22,15 +24,27 @@ export const loginUserControl = asyncHandler( async (req, res) => {
     /*Selects User infor for correlation of database info  */
     const findUser = await User.findOne({ email });
     if(findUser && await findUser.isPasswordMatched(password)){
-     res.json({
-        _id: findUser?._id,
-        firstname: findUser?.firstname,
-        lastname: findUser?.lastname,
-        email: findUser?.email,
-        mobile: findUser?.mobile,
-        token: generateToken(findUser?._id)
-     })
+        res.json({
+            _id: findUser?._id,
+            firstname: findUser?.firstname,
+            lastname: findUser?.lastname,
+            email: findUser?.email,
+            mobile: findUser?.mobile,
+            token: generateToken(findUser?._id).slice(50).trimLeft()
+        })    
     }else{
         throw new Error("Invalid Credential")
     }
+
 });
+
+
+//GET ALL USERS 
+export const getAllUsers = asyncHandler( async (req, res) => {
+    try{
+      const getUsers = await User.find()
+      res.json(getUsers)
+    }catch(error){
+        throw new Error("error")
+    }
+})
