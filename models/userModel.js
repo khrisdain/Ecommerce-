@@ -24,6 +24,10 @@ const userSchema = new mongoose.Schema({
         type:String,
         required:true,
     },
+    isAdmin:{
+        type: String,
+        default: 'user',
+    }
 });
 mongoose.set("strictQuery", false)
 
