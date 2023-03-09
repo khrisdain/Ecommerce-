@@ -62,11 +62,33 @@ export const getUser = asyncHandler( async (req, res) => {
 });
 
 
+//UPDATE A USER { user modifying information}
+export const updateUser = asyncHandler( async(req, res) => {
+    const {id} = req.params;
+    try{
+        const updateUser = await User.findByIdAndUpdate(id, {
+                firstname: req?.body?.firstname,
+                lastname: req?.body?.lastname,
+                email: req?.body?.email,
+                mobile: req?.body?.email,
+                password: req?.body?.password,
+            }, 
+            {
+                new: true
+            }
+        );
+        res.json(updateUser)
+    }
+    catch(error){
+        throw new Error(error)
+    }
+})
+
 //DELETE A USER
 export const deleteUser = asyncHandler( async(req, res) => {
     const { id } = req.params;
     try{
-        const deleteuser = await User.findById(id);
+        const deleteuser = await User.findByIdAndDelete(id);
         res.json({ deleteuser })
     }
     catch(error){
