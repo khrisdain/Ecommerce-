@@ -47,4 +47,30 @@ export const getAllUsers = asyncHandler( async (req, res) => {
     }catch(error){
         throw new Error("error")
     }
-})
+});
+
+
+//GET A SINGLE USER
+export const getUser = asyncHandler( async (req, res) => {
+    const { id } = req.params;
+    try{
+        const findUser = await User.findById({ id })
+        res.json({ findUser });
+    }catch(error){
+        throw new Error(error)
+    }
+});
+
+
+//DELETE A USER
+export const deleteUser = asyncHandler( async (req, res) => {
+    const { id } = req.params;
+    try{
+        const deleteUser = await User.findById({ id })
+        res.json({ 
+            deleteUser
+        });
+    }catch(error){
+        throw new Error(error)
+    }
+});
