@@ -24,10 +24,11 @@ const userSchema = new mongoose.Schema({
         type:String,
         required:true,
     },
-    isAdmin:{
-        type: String,
-        default: 'user',
-    }
+    cart: {
+        type: Array,
+        default: [],
+    },
+    address: [{ type: objectId, ref: address}]
 });
 mongoose.set("strictQuery", false)
 
