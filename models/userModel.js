@@ -28,7 +28,14 @@ const userSchema = new mongoose.Schema({
         type: Array,
         default: [],
     },
-    address: [{ type: objectId, ref: address}]
+    address: [{ 
+        type: ObjectId, 
+        ref: "Address" 
+    }],
+    wishlist: [{ 
+        type: ObjectId, 
+        ref: "Address" 
+    }],
 });
 mongoose.set("strictQuery", false)
 
