@@ -34,8 +34,10 @@ const userSchema = new mongoose.Schema({
     }],
     wishlist: [{ 
         type: ObjectId, 
-        ref: "Address" 
+        ref: "Product" 
     }],
+}, {
+    timestamps: true
 });
 mongoose.set("strictQuery", false)
 
