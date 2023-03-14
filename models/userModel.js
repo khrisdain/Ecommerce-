@@ -1,6 +1,6 @@
 import mongoose from "mongoose";
 import bcrypt from 'bcrypt';
-// Declare the Schema of the Mongo model
+// Declare the Schema of the Mongo mode
 const userSchema = new mongoose.Schema({
     firstname:{
         type:String,
@@ -28,14 +28,10 @@ const userSchema = new mongoose.Schema({
         type: Array,
         default: [],
     },
-    address: [{ 
-        type: ObjectId, 
-        ref: "Address" 
-    }],
-    wishlist: [{ 
-        type: ObjectId, 
-        ref: "Product" 
-    }],
+    address: { 
+        type: String
+    },
+    wishlist: [{ type: mongoose.Schema.Types.ObjectId, ref: "Product" }],
 }, {
     timestamps: true
 });
