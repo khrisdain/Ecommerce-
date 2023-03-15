@@ -64,7 +64,7 @@ export const getUser = asyncHandler( async (req, res) => {
 
 //UPDATE A USER { user modifying information}
 export const updatedUser = asyncHandler( async(req, res) => {
-    const {id} = req.params;
+    const {_id} = req.user;
     try{
         const updatedUser = await User.findByIdAndUpdate(id, {
                 firstname: req?.body?.firstname,

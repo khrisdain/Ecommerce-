@@ -10,6 +10,6 @@ router.post("/login", loginUserControl);
 router.get("/all-users", getAllUsers);
 router.get("/:id", authMiddleware, isAdmin, getUser);
 router.delete("/:id", deleteUser);
-router.put("/:id", updatedUser)
+router.put("/edit-users", updatedUser) //Update user
 
 export default router; 
