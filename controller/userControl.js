@@ -30,7 +30,7 @@ export const loginUserControl = asyncHandler( async (req, res) => {
             lastname: findUser?.lastname,
             email: findUser?.email,
             mobile: findUser?.mobile,
-            token: generateToken(findUser?._id).slice(50).trimLeft()
+            token: generateToken(findUser?._id)
         })    
     }else{
         throw new Error("Invalid Credential")
@@ -52,7 +52,7 @@ export const getAllUsers = asyncHandler( async (req, res) => {
 
 //GET A SINGLE USER
 export const getUser = asyncHandler( async (req, res) => {
-    const { id } = req.params;
+    const { id } = req.user;
     try{
         const findUser = await User.findById(id)
         res.json({ findUser });
@@ -66,7 +66,7 @@ export const getUser = asyncHandler( async (req, res) => {
 export const updatedUser = asyncHandler( async(req, res) => {
     const {_id} = req.user;
     try{
-        const updatedUser = await User.findByIdAndUpdate(id, {
+        const updatedUser = await User.findByIdAndUpdate(_id, {
                 firstname: req?.body?.firstname,
                 lastname: req?.body?.lastname,
                 email: req?.body?.email,
@@ -94,4 +94,45 @@ export const deleteUser = asyncHandler( async(req, res) => {
         throw new Error(error)
     }
 });
+
+
+//BLOCK A USER
+export const blockUser = asyncHandler( async(req, res) => {
+    const { id } = req.params
+    try{
+        const block = await User.findByIdAndUpdate(
+            id,
+            {
+                isBlocked: true,
+            },
+            {
+                new: true
+            }
+        );
+        res.json({
+            message: "User Blocked"
+        });
+    } catch(error){
+        throw new Error(error)
+    }
+})
+
+//UNBLOCK A USER
+export const unblockUser = asyncHandler( async(req, res) => {
+    const { id } = req.params
+    try{
+        const unblcok = await User.findByIdAndUpdate(
+            id,
+            {
+                isBlocked: false
+            },
+            {
+                new: true
+            },
+        );
+        res.json("User is blocked")
+    } catch(error){
+        throw new Error(error)
+    }
+})
 
