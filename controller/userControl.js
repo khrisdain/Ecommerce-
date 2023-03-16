@@ -130,7 +130,7 @@ export const unblockUser = asyncHandler( async(req, res) => {
                 new: true
             },
         );
-        res.json("User is blocked")
+        res.json("User is unblocked")
     } catch(error){
         throw new Error(error)
     }
