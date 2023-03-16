@@ -100,18 +100,8 @@ export const deleteUser = asyncHandler( async(req, res) => {
 export const blockUser = asyncHandler( async(req, res) => {
     const { id } = req.params
     try{
-        const block = await User.findByIdAndUpdate(
-            id,
-            {
-                isBlocked: true,
-            },
-            {
-                new: true
-            }
-        );
-        res.json({
-            message: "User Blocked"
-        });
+        const blockUsr = await User.findByIdAndUpdate(id, {isBlocked: true}, {new: true});
+        res.json(blockUsr);
     } catch(error){
         throw new Error(error)
     }
@@ -121,16 +111,9 @@ export const blockUser = asyncHandler( async(req, res) => {
 export const unblockUser = asyncHandler( async(req, res) => {
     const { id } = req.params
     try{
-        const unblcok = await User.findByIdAndUpdate(
-            id,
-            {
-                isBlocked: false
-            },
-            {
-                new: true
-            },
-        );
-        res.json("User is unblocked")
+        const unblcokUsr = await User.findByIdAndUpdate(id, { isBlocked: false }, { new: true });
+        res.json({ message: "User is unblocked "})
+        console.log(unblcokUsr)
     } catch(error){
         throw new Error(error)
     }
