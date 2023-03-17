@@ -101,7 +101,7 @@ export const blockUser = asyncHandler( async(req, res) => {
     const { id } = req.params
     try{
         const blockUsr = await User.findByIdAndUpdate(id, {isBlocked: true}, {new: true});
-        res.json(blockUsr);
+        res.json({ message: "user is blocked"});
     } catch(error){
         throw new Error(error)
     }
