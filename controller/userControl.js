@@ -112,7 +112,7 @@ export const unblockUser = asyncHandler( async(req, res) => {
     const { id } = req.params
     try{
         const unblcokUsr = await User.findByIdAndUpdate(id, { isBlocked: false }, { new: true });
-        res.json({ message: "User is unblocked "})
+        res.json({ message: "User is unblocked" })
         console.log(unblcokUsr)
     } catch(error){
         throw new Error(error)
