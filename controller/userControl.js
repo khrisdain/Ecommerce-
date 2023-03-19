@@ -2,7 +2,7 @@ import User from "../models/userModel.js";
 import asyncHandler from "express-async-handler";
 import { generateToken } from "../config/jwtTokens.js";
 import { validateMongoDBId } from "../utils/validateMongodbId.js";
-
+import { generateRefreshToken } from "../config/refreshToken.js";
 
 //CREATE A NEW USER
 export const createUser = asyncHandler(async (req, res) => {
@@ -26,6 +26,18 @@ export const loginUserControl = asyncHandler( async (req, res) => {
     /*Selects User infor for correlation of database info  */
     const findUser = await User.findOne({ email });
     if(findUser && await findUser.isPasswordMatched(password)){
+        const refreshToken = await generateTRefreshToken(findUser?._id);
+        const updateUser = await User.findByIdAndUpdate(
+            findUser.id,
+            {
+                refreshToken: refreshToken
+            },
+            {new: true} 
+        );
+        res.cookie("refreshToken", refreshToken, {
+            httpOnly: true,
+            maxAge: 60 * 60 * 1000
+        });
         res.json({
             _id: findUser?._id,
             firstname: findUser?.firstname,

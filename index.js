@@ -5,7 +5,9 @@ import dotenv from "dotenv";
 import cors from "cors";
 import dbConnect from "./config/dbConnect.js";
 import authRouter from "./routes/authRouter.js";
+import cookieParser from "cookie-parser";
 import {notFound, errorHandler} from "./middlewares/errorHandler.js";
+
 
 dotenv.config();
 const app = express();
@@ -15,6 +17,7 @@ dbConnect();
 app.use(bodyParser.json())
 app.use(bodyParser.urlencoded({ extended: false })); //false prevents objects of objects 
 app.use(cors()); //cross origin resource sahring 
+app.use(cookieParser()); //
 
 app.use("/api/user", authRouter)
 
