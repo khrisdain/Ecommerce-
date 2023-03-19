@@ -1,6 +1,6 @@
 //not found 
 export const notFound = (req, res, next) => {
-    const error = new Error(`Not Found: ${req.originalUrl}`); //new error same with error
+    const error = new Error(`Not Found: ${req.originalUrl}`); 
     res.status(404);
     next(error)
 };
