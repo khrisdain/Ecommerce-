@@ -1,5 +1,6 @@
 import User from "../models/userModel.js";
 import asyncHandler from "express-async-handler";
+import jwt  from "jsonwebtoken";
 import { generateToken } from "../config/jwtTokens.js";
 import { validateMongoDBId } from "../utils/validateMongodbId.js";
 import { generateRefreshToken } from "../config/refreshToken.js";
@@ -26,7 +27,7 @@ export const loginUserControl = asyncHandler( async (req, res) => {
     /*Selects User infor for correlation of database info  */
     const findUser = await User.findOne({ email });
     if(findUser && await findUser.isPasswordMatched(password)){
-        const refreshToken = await generateTRefreshToken(findUser?._id);
+        const refreshToken = await generateRefreshToken(findUser?._id);
         const updateUser = await User.findByIdAndUpdate(
             findUser.id,
             {
@@ -36,7 +37,7 @@ export const loginUserControl = asyncHandler( async (req, res) => {
         );
         res.cookie("refreshToken", refreshToken, {
             httpOnly: true,
-            maxAge: 60 * 60 * 1000
+            maxAge: 72 * 60 * 60 * 1000,
         });
         res.json({
             _id: findUser?._id,
@@ -51,6 +52,23 @@ export const loginUserControl = asyncHandler( async (req, res) => {
     }
 
 });
+
+//handle Refresh Token
+export const handleRefreshToken = asyncHandler( async(req, res) => {
+    const cookie = req.cookies; //express objects 
+    if(!cookie?.refreshToken) throw new Error("No refresh token in cookie");
+    const refreshToken = cookie?.refreshToken;
+    const user = await User.findOne({ refreshToken });
+    if(!user) throw new Error("no refresh token in database or mismatch");
+    jwt.verify(refreshToken, process.env.JWT_SECRET, (err, decoded => {
+        if(err || user?._id !== decoded?._id){
+            throw new Error("There is something wrong with refresh token")
+        }
+        const accessToken = generateToken(findUser._id) //instead of using jwt.sign()...
+        res.json({accessToken})
+    }))
+    res.json(user)
+})
 
 
 //GET ALL USERS 
