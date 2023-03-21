@@ -1,7 +1,8 @@
 import express from "express";
 import { 
     createUser, 
-    loginUserControl, 
+    loginUserControl,
+    logout, 
     getAllUsers, 
     getUser, 
     deleteUser, 
@@ -19,7 +20,7 @@ router.post("/register", createUser);
 router.post("/login", loginUserControl);
 router.get("/all-users", getAllUsers);
 router.get("/refresh", handleRefreshToken);
-
+router.post("/logout", logout)
 router.get("/:id", authMiddleware, isAdmin, getUser);
 router.delete("/:id", deleteUser);
 router.put("/edit-user", authMiddleware, updatedUser) 
