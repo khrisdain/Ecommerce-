@@ -56,17 +56,18 @@ export const loginUserControl = asyncHandler( async (req, res) => {
 //handle Refresh Token
 export const handleRefreshToken = asyncHandler( async(req, res) => {
     const cookie = req.cookies; //express objects 
+    console.log(cookie)
     if(!cookie?.refreshToken) throw new Error("No refresh token in cookie");
-    const refreshToken = cookie?.refreshToken;
+    const refreshToken = cookie.refreshToken;
     const user = await User.findOne({ refreshToken });
     if(!user) throw new Error("no refresh token in database or mismatch");
-    jwt.verify(refreshToken, process.env.JWT_SECRET, (err, decoded => {
-        if(err || user?._id !== decoded?._id){
+    jwt.verify(refreshToken, process.env.JWT_SECRET, (err, decoded) => {
+        if(err || user.id !== decoded.id){
             throw new Error("There is something wrong with refresh token")
         }
-        const accessToken = generateToken(findUser._id) //instead of using jwt.sign()...
+        const accessToken = generateToken(user?._id) //instead of using jwt.sign()...
         res.json({accessToken})
-    }))
+    });
     res.json(user)
 })
 
