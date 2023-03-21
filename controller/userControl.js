@@ -35,6 +35,7 @@ export const loginUserControl = asyncHandler( async (req, res) => {
             },
             {new: true} 
         );
+        //assigned req.cookies value 
         res.cookie("refreshToken", refreshToken, {
             httpOnly: true,
             maxAge: 72 * 60 * 60 * 1000,
@@ -56,7 +57,6 @@ export const loginUserControl = asyncHandler( async (req, res) => {
 //handle Refresh Token
 export const handleRefreshToken = asyncHandler( async(req, res) => {
     const cookie = req.cookies; //express objects 
-    console.log(cookie)
     if(!cookie?.refreshToken) throw new Error("No refresh token in cookie");
     const refreshToken = cookie.refreshToken;
     const user = await User.findOne({ refreshToken });
@@ -71,6 +71,44 @@ export const handleRefreshToken = asyncHandler( async(req, res) => {
     res.json(user)
 })
 
+//LOGOUT USER
+export const logout = asyncHandler( async(req, res) => {
+    const cookie = req.cookies  
+    if(!cookie?.refreshToken) throw new Error("No referesh token in cookies");
+    const refreshToken = cookie.refreshToken;
+    const user = await User.findOne({ refreshToken });
+    if(!user){
+        res.clearCookie("refreshToken", {
+            http: true,
+            secure: true,
+        });
+        return res.status(204); //forbidden
+    }
+})
+
+
+//UPDATE A USER { user modifying information}
+export const updatedUser = asyncHandler( async(req, res) => {
+    const {_id} = req.user;
+    validateMongoDBId( _id )
+
+    try{
+        const updatedUser = await User.findByIdAndUpdate(_id, {
+                firstname: req?.body?.firstname,
+                lastname: req?.body?.lastname,
+                email: req?.body?.email,
+                mobile: req?.body?.email,
+            }, 
+            {
+                new: true,
+            }
+        );
+        res.json(updatedUser)
+    }
+    catch(error){
+        throw new Error(error)
+    }
+});
 
 //GET ALL USERS 
 export const getAllUsers = asyncHandler( async (req, res) => {
@@ -97,28 +135,6 @@ export const getUser = asyncHandler( async (req, res) => {
 });
 
 
-//UPDATE A USER { user modifying information}
-export const updatedUser = asyncHandler( async(req, res) => {
-    const {_id} = req.user;
-    validateMongoDBId( _id )
-
-    try{
-        const updatedUser = await User.findByIdAndUpdate(_id, {
-                firstname: req?.body?.firstname,
-                lastname: req?.body?.lastname,
-                email: req?.body?.email,
-                mobile: req?.body?.email,
-            }, 
-            {
-                new: true,
-            }
-        );
-        res.json(updatedUser)
-    }
-    catch(error){
-        throw new Error(error)
-    }
-});
 
 //DELETE A USER
 export const deleteUser = asyncHandler( async(req, res) => {
