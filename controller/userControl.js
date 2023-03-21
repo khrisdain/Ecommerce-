@@ -82,7 +82,7 @@ export const logout = asyncHandler( async(req, res) => {
             http: true,
             secure: true,
         });
-        return res.status(204); //forbidden
+        return res.sendStatus(204); //forbidden
     }
 })
 
