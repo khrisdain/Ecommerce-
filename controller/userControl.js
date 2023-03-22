@@ -71,7 +71,7 @@ export const handleRefreshToken = asyncHandler( async(req, res) => {
     res.json(user)
 })
 
-//LOGOUT USER
+//LOGOUT FUNCTIONALITY
 export const logout = asyncHandler( async(req, res) => {
     const cookie = req.cookies  
     if(!cookie?.refreshToken) throw new Error("No referesh token in cookies");
@@ -84,7 +84,15 @@ export const logout = asyncHandler( async(req, res) => {
         });
         return res.sendStatus(204); //forbidden
     }
-})
+    await User.findOneAndUpdate(refreshToken, {
+        refreshToken: "",
+    });
+    res.clearCookie("refreshToken", {
+        http: true,
+        secure:true,
+    })
+    res.sendStatus(204) //forbiddn
+});
 
 
 //UPDATE A USER { user modifying information}
