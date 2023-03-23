@@ -5,6 +5,7 @@ import dotenv from "dotenv";
 import cors from "cors";
 import dbConnect from "./config/dbConnect.js";
 import authRouter from "./routes/authRouter.js";
+import productRouter from "./routes/productRouter.js";
 import cookieParser from "cookie-parser";
 import {notFound, errorHandler} from "./middlewares/errorHandler.js";
 
@@ -19,7 +20,8 @@ app.use(bodyParser.urlencoded({ extended: false })); //false prevents objects of
 app.use(cors()); //cross origin resource sahring 
 app.use(cookieParser()); //
 
-app.use("/api/user", authRouter)
+app.use("/api/user", authRouter);
+app.use("/api/product", productRouter);
 
 app.use(notFound);
 app.use(errorHandler)
