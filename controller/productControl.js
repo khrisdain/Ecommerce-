@@ -17,6 +17,19 @@ export const createProduct = asyncHandler( async(req, res) => {
 })
 
 
+//UPDATE A PRODUCT
+export const updateProduct = asyncHandler( async(req, res) => {
+    const id = req.params;
+    try{
+        if(req.body.title) {
+            req.body.slug = slugify(req.body.title);
+        }
+        const updatedProduct = await Product.findOneAndUpdate(id, req.body, {new: true});
+    }catch(error){
+        throw new Error(error)
+    }
+});
+
 //Get a product 
 export const getAProduct = asyncHandler( async(req, res) => {
     const {id} = req.params;
