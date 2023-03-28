@@ -1,6 +1,7 @@
 import Product from "../models/productModel.js";
 import asyncHandler from "express-async-handler";
 import slugify from "slugify";
+import { validateMongoDBId } from "../utils/validateMongodbId.js";
 
 
 //Create a new product
@@ -18,17 +19,23 @@ export const createProduct = asyncHandler( async(req, res) => {
 
 
 //UPDATE A PRODUCT
-export const updateProduct = asyncHandler( async(req, res) => {
-    const id = req.params;
-    try{
-        if(req.body.title) {
-            req.body.slug = slugify(req.body.title);
-        }
-        const updatedProduct = await Product.findOneAndUpdate(id, req.body, {new: true});
-    }catch(error){
-        throw new Error(error)
+export const updateProduct = asyncHandler(async (req, res) => {
+    const { id } = req.params;
+    validateMongoDBId(id);
+    try {
+      if (req.body.title) {
+        req.body.slug = slugify(req.body.title);
+        console.log(req.body)
+      }
+      const updateProduct = await Product.findOneAndUpdate( {id: id}, req.body, {
+        new: true,
+      });
+      res.json(updateProduct);
+    } catch (error) {
+      throw new Error(error);
     }
-});
+  });
+  
 
 //Get a product 
 export const getAProduct = asyncHandler( async(req, res) => {
