@@ -20,21 +20,33 @@ export const createProduct = asyncHandler( async(req, res) => {
 
 //UPDATE A PRODUCT
 export const updateProduct = asyncHandler(async (req, res) => {
-    const { id } = req.params;
+    const {id} = req.params;
     validateMongoDBId(id);
     try {
       if (req.body.title) {
-        req.body.slug = slugify(req.body.title);
-        console.log(req.body)
+        req.body.slug = slugify(req.body.title);        
       }
-      const updateProduct = await Product.findOneAndUpdate( {id: id}, req.body, {
-        new: true,
+      const updateProduct = await Product.findOneAndUpdate({_id: id}, req.body, {
+        new: true
       });
       res.json(updateProduct);
     } catch (error) {
       throw new Error(error);
     }
-  });
+});
+
+
+//DELETE A PRODUCT
+export const deleteProduct = asyncHandler( async(req, res) => {
+    const {id} = req.params;
+    console.log(req.params)
+    try{
+        const deleteProduct = await Product.findOneAndDelete({_id: id});
+        res.json(deleteProduct);
+    }catch(error){
+        throw new Error(error)
+    }
+})
   
 
 //Get a product 
