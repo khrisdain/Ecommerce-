@@ -64,14 +64,14 @@ export const getAProduct = asyncHandler( async(req, res) => {
 
 //Get all products
 export const getAllProducts= asyncHandler( async(req, res) => {
-    console.log(req.query)
     try{
         const getallProducts = await Product.find({
-            brand: req.query?.brand,
-            category: req.query?.category
+            brand: req.query.brand
         });
-        res.json(getallProducts);
-    }catch(error){
+        console.log()
+        res.json({data: getallProducts})
+    }
+    catch(error){
         throw new Error(error)
     }
 })
