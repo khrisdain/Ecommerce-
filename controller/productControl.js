@@ -65,11 +65,16 @@ export const getAProduct = asyncHandler( async(req, res) => {
 //Get all products
 export const getAllProducts= asyncHandler( async(req, res) => {
     try{
-        const getallProducts = await Product.find({
-            brand: req.query.brand
-        });
-        console.log()
-        res.json({data: getallProducts})
+        const queryObj = { ...req.query };
+        const excludeFields = ["page", "sort", "limit", "fields"];
+        excludeFields.forEach(el => delete queryObj[el]);
+
+        let queryStr = JSON.stringify(queryObj);
+        queryStr = queryStr.replace(/\b(gte|gt|lte|lt)\b/g, (match) => `$${match}`) // \b reps matching border
+        console.log(JSON.parse(queryStr))
+        console.log(queryObj, excludeFields);
+        const getallproducts = await Product.find(queryObj);
+        res.json({getallproducts});
     }
     catch(error){
         throw new Error(error)
