@@ -82,6 +82,14 @@ export const getAllProducts= asyncHandler( async(req, res) => {
         }else{
             query = query.sort("-createdAt")
         }
+
+        //limiting the fields to only
+        if(req.query.fields) {
+            const fields = req.query.fields.split(",").join(" ");
+            query = query.select(fields);
+        }else{
+           query = query.select('-__v') 
+        }
         const product = await query;//matching Query fetched from database
         res.json({product});
     }
