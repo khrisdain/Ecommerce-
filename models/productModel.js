@@ -49,7 +49,7 @@ var productSchema = new mongoose.Schema({
             postedby: { type: mongoose.Schema.Types.ObjectId, ref: "User"},
         },
     ],
-}, {timestamp: true})
+}, {timestamps: true})
 
 //Export the model
 const Product = mongoose.model('Product', productSchema);
