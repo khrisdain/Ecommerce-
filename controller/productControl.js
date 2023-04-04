@@ -80,7 +80,7 @@ export const getAllProducts= asyncHandler( async(req, res) => {
             const sortBy = req.query.sort.split(",").join("")
             query = query.sort(sortBy)
         }else{
-            query = query.sort("createdAt")
+            query = query.sort("-createdAt")
         }
         const product = await query;//matching Query fetched from database
         res.json({product});
