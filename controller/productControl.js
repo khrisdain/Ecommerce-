@@ -72,14 +72,15 @@ export const getAllProducts= asyncHandler( async(req, res) => {
         let queryStr = JSON.stringify(queryObj);
         queryStr = queryStr.replace(/\b(gte|gt|lte|lt)\b/g, (match) => `$${match}`) // \b reps matching border
 
-        const query = Product.find(JSON.parse(queryStr)); //access database model
-        console.log(query)
+        let query = Product.find(JSON.parse(queryStr)); //access database model
+      
 
        //Sorting
         if(req.query.sort) {
-            const sortBy = req.query.sort
+            const sortBy = req.query.sort.split(",").join("")
+            query = query.sort(sortBy)
         }else{
-
+            query = query.sort("createdAt")
         }
         const product = await query;//matching Query fetched from database
         res.json({product});
