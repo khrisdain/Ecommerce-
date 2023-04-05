@@ -5,6 +5,7 @@ import {
     getAllProducts,
     updateProduct,
     deleteProduct,
+    logout,
 } from "../controller/productControl.js";
 import { isAdmin, authMiddleware } from "../middlewares/authMiddleware.js";
 
