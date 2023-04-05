@@ -172,9 +172,11 @@ export const blockUser = asyncHandler( async(req, res) => {
     }
 })
 
+
 //UNBLOCK A USER
 export const unblockUser = asyncHandler( async(req, res) => {
     const { _id } = req.user
+    console.log(req.user)
     validateMongoDBId( _id )
 
     try{
@@ -183,6 +185,22 @@ export const unblockUser = asyncHandler( async(req, res) => {
         console.log(unblcokUsr)
     } catch(error){
         throw new Error(error)
+    }
+})
+
+//UPDATE USER PASSWORD
+export const updatePassword = asyncHandler( async(req, res) => {
+    const { _id } = req.user;
+    const password = req.body; //parsed from POST(login);
+    validateMongoDBId(_id);
+
+    const user = await User.findById(_id);
+    if (password) {
+        user.password = password;
+        const updatedPassword = await user.save();
+        res.json(updatedPassword);
+    }else{
+        res.json(user)
     }
 })
 
