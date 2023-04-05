@@ -89,7 +89,19 @@ export const getAllProducts= asyncHandler( async(req, res) => {
             query = query.select(fields);
         }else{
            query = query.select('-__v') 
+        };
+
+        //pagination
+        const page = req.query.page;
+        const limit = req.query.limit;
+        const skip = (page - 1) * limit;
+        query = query.skip(skip).limit(limit)
+        
+        if(req.query.page) {
+            const productCount = await Product.countDocuments() //mongoose countDoc 
+            if(skip >= productCount) throw new Error('This page does not exist')
         }
+
         const product = await query;//matching Query fetched from database
         res.json({product});
     }
