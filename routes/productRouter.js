@@ -16,4 +16,5 @@ router.put("/:id", authMiddleware, isAdmin, updateProduct)
 router.delete("/:id", authMiddleware, isAdmin, deleteProduct)
 router.get("/:id", getAProduct)
 router.get("/", getAllProducts)
+router.post("/:id", logout)
 export default router;
