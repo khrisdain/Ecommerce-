@@ -191,7 +191,7 @@ export const unblockUser = asyncHandler( async(req, res) => {
 //UPDATE USER PASSWORD
 export const updatePassword = asyncHandler( async(req, res) => {
     const { _id } = req.user;
-    const password = req.body; //parsed from POST(login);
+    const { password } = req.body; //parsed from PUT(updatePassword);
     validateMongoDBId(_id);
 
     const user = await User.findById(_id);
