@@ -9,7 +9,8 @@ import {
     updatedUser,
     blockUser,
     unblockUser,
-    handleRefreshToken
+    handleRefreshToken,
+    updatePassword,
  } from "../controller/userControl.js";
 import { authMiddleware, isAdmin } from "../middlewares/authMiddleware.js";
 
@@ -17,6 +18,7 @@ const router = express.Router();
 
 //routes for controllers
 router.post("/register", createUser);
+router.put("/password", authMiddleware, updatePassword)
 router.post("/login", loginUserControl);
 router.get("/all-users", getAllUsers);
 router.get("/refresh", handleRefreshToken);
