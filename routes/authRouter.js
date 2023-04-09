@@ -11,6 +11,7 @@ import {
     unblockUser,
     handleRefreshToken,
     updatePassword,
+    forgotPasswordToken
  } from "../controller/userControl.js";
 import { authMiddleware, isAdmin } from "../middlewares/authMiddleware.js";
 
@@ -20,6 +21,7 @@ const router = express.Router();
 router.post("/register", createUser);
 router.put("/password", authMiddleware, updatePassword)
 router.post("/login", loginUserControl);
+router.post("/forgot-password-token", forgotPasswordToken)
 router.get("/all-users", getAllUsers);
 router.get("/refresh", handleRefreshToken);
 router.post("/logout", logout)
