@@ -209,10 +209,19 @@ export const updatePassword = asyncHandler( async(req, res) => {
 export const forgotPasswordToken = asyncHandler( async(req, res) => {
     const { email } = req.body;
     const user = await User.findOne({email});
-    if(!user) throw new Error ("User not found");
+    if(!user) throw new Error ("No user found for this email");
     try{
         const token = await user.createPasswordResetToken();
-        await user.save()
+        await user.save();
+        const resetURL = `Hi, please follow this link to reset your password. This link is valid for 10minutes. <a href="http://localhost:3001/api/user/reser-password/${token}"> Click Here </a>`
+        const data = {
+            to: email,
+            text: "Hey User",
+            subject: "Forgot password link",
+            htm: resetURL 
+        };
+        sendEmail(data);
+        res.json(token)
     }catch(error){
         throw new Error(error);
     }
