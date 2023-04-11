@@ -4,6 +4,7 @@ import jwt  from "jsonwebtoken";
 import { generateToken } from "../config/jwtTokens.js";
 import { validateMongoDBId } from "../utils/validateMongodbId.js";
 import { generateRefreshToken } from "../config/refreshToken.js";
+import { sendEmail }from "./emailController.js"
 
 //CREATE A NEW USER
 export const createUser = asyncHandler(async (req, res) => {
