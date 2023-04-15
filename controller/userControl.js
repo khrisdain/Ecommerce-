@@ -5,6 +5,7 @@ import { generateToken } from "../config/jwtTokens.js";
 import { validateMongoDBId } from "../utils/validateMongodbId.js";
 import { generateRefreshToken } from "../config/refreshToken.js";
 import { sendEmail }from "./emailController.js"
+import crypto from "crypto"
 
 //CREATE A NEW USER
 export const createUser = asyncHandler(async (req, res) => {
@@ -228,3 +229,10 @@ export const forgotPasswordToken = asyncHandler( async(req, res) => {
     }
 });
 
+
+//reset a password
+export const resetPassword = asyncHandler( async(req, res) => {
+    const { password } = req.body;
+    const { token } = req.params;
+    const hashedToken = crypto.createHash("sha256").update(token).digest("hex");
+})
