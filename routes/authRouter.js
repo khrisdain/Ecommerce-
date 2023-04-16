@@ -11,7 +11,8 @@ import {
     unblockUser,
     handleRefreshToken,
     updatePassword,
-    forgotPasswordToken
+    forgotPasswordToken,
+    resetPassword,
  } from "../controller/userControl.js";
 import { authMiddleware, isAdmin } from "../middlewares/authMiddleware.js";
 
@@ -22,6 +23,7 @@ router.post("/register", createUser);
 router.put("/password", authMiddleware, updatePassword)
 router.post("/login", loginUserControl);
 router.post("/forgot-password-token", forgotPasswordToken)
+router.post("/reset-password/:token", resetPassword)
 router.get("/all-users", getAllUsers);
 router.get("/refresh", handleRefreshToken);
 router.post("/logout", logout)
