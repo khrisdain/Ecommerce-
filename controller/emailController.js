@@ -5,13 +5,13 @@ import nodemailer from "nodemailer";
 import asyncHandler from "express-async-handler"
 
 export const sendEmail = asyncHandler( async(data, req, res) => {
-    
+  try{
       // create reusable transporter object using the default SMTP transport
       let transporter = nodemailer.createTransport({
         service: "gmail",
         auth: {
-          user: process.env.MAIL_ID, // generated ethereal user(actual user in this case is me)
-          pass: process.env.MP // generated ethereal password
+          user: process.env.EMAIL, // generated ethereal user(actual user in this case is me)
+          pass: process.env.PASSWORD // generated ethereal password
         },
       });
     
@@ -23,12 +23,16 @@ export const sendEmail = asyncHandler( async(data, req, res) => {
         text: data.text, // plain text body
         html: data.html, // html body
       });  
-
+    
       console.log("Message sent: %s", info.messageId);
       // Message sent: <b658f8ca-6296-ccf4-8306-87d57a0b4321@example.com>
     
       // Preview only available when sending through an Ethereal account`
       console.log("Preview URL: %s", nodemailer.getTestMessageUrl(info));
       // Preview URL: https://ethereal.email/message/WaQKMgKddxQDoou... 
+
+    }catch(error){
+      throw new Error(error)
+    }
 
 })
