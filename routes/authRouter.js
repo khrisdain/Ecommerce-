@@ -23,7 +23,7 @@ router.post("/register", createUser);
 router.put("/password", authMiddleware, updatePassword)
 router.post("/login", loginUserControl);
 router.post("/forgot-password-token", forgotPasswordToken)
-router.post("/reset-password/:token", resetPassword)
+router.put("/reset-password/:token", resetPassword)
 router.get("/all-users", getAllUsers);
 router.get("/refresh", handleRefreshToken);
 router.post("/logout", logout)
