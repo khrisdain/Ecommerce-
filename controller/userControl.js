@@ -220,7 +220,7 @@ export const forgotPasswordToken = asyncHandler( async(req, res) => {
             to: email,
             text: "Hey User",
             subject: "Forgot password link",
-            html: resetURL 
+            htm: resetURL 
         };
         sendEmail(data);
         res.json(token)
@@ -244,4 +244,5 @@ export const resetPassword = asyncHandler( async(req, res) => {
     user.passwordResetToken = undefined;
     user.passwordResetExpires = undefined;
     await user.save()
+    console.log(user)
 })
