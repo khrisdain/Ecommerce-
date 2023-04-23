@@ -1,5 +1,4 @@
-const mongoose = require('mongoose'); // Erase if already required
-
+import mongoose from "mongoose"
 // Declare the Schema of the Mongo model
 var blogSchema = new mongoose.Schema({
     title:{
@@ -41,11 +40,25 @@ var blogSchema = new mongoose.Schema({
     image: {
         type: String,
         default: "https://www.shutterstock.com/image-photo/bloggingblog-concepts-ideas-white-worktable-1029506242"
-    }
-});
+    },
+    author: {
+        type: String,
+        default: "Admin"
+    },
+},
+{
+    toJSON: {
+        virtuals:true,
+    },
+    toObject: {
+        virtuals: true
+    },
+    timestamps: true,
+}   
+);
 //today's change
 
 //Export the model
-const blogs = mongoose.model('Blogs', blogSchema);
+const blogs = mongoose.model('Blog', blogSchema);
 
 export default blogs;
