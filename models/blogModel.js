@@ -43,6 +43,7 @@ var blogSchema = new mongoose.Schema({
         default: "https://www.shutterstock.com/image-photo/bloggingblog-concepts-ideas-white-worktable-1029506242"
     }
 });
+//today's change
 
 //Export the model
 const blogs = mongoose.model('Blogs', blogSchema);
