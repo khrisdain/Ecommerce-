@@ -11,3 +11,7 @@ export const createBlog = asyncHandler( async(req, res) => {
         throw new Error(error)
     }
 })
+
+export const updateBlog = asyncHandler( async(req, res) => {
+
+})
