@@ -11,13 +11,3 @@ export const createBlog = asyncHandler( async(req, res) => {
         throw new Error(error)
     }
 })
-
-export const updateBlog = asyncHandler( async(req, res) => {
-    const {email} = req.body;
-    try{
-        const userBlog = await User.find({email})
-        if(!user) return "nouser found"
-    }catch(error){
-        throw new Error(error)
-    }
-})
