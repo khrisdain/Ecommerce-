@@ -26,4 +26,31 @@ export const updateBlog = asyncHandler( async(req, res) => {
     }
 });
 
-export 
+export const getBlog = asyncHandler( async(req, res) => {
+    const { id } = req.params
+    try{
+        const getABlog = await Blog.findById(id)
+        await Blog.findByIdAndUpdate(
+            id,
+            {
+                $inc: { Views: 1 } 
+            },
+            {
+                new: true
+            }            
+        ) //$inc reps increment as oppose to set and val is set at 1
+        res.json(getABlog)
+    }catch(error){
+        throw new Error(error)
+    }
+});
+
+
+export const getAllBlogs = asyncHandler(async(req, res) => {
+    try{
+        const getBlogs = await Blog.findfind();
+        res.json(getBlogs)
+    }catch(error){
+        throw new Error(error)
+    }
+})
