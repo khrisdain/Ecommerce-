@@ -15,7 +15,7 @@ export const createBlog = asyncHandler( async(req, res) => {
     }
 })
 
-
+//update logics get respawned across few controllers
 export const updateBlog = asyncHandler( async(req, res) => {
     const { id } = req.params;
     try{
@@ -33,13 +33,13 @@ export const getBlog = asyncHandler( async(req, res) => {
         const updateViews = await Blog.findByIdAndUpdate(
             id,
             {
-                $inc: { Views } 
+                $inc: { Views: 1 } 
             },
             {
                 new: true
             }            
         ) //$inc reps increment as oppose to set and val is set at 1
-        res.json(getABlog, updateViews)
+        res.json(updateViews)
     }catch(error){
         throw new Error(error)
     }
@@ -48,9 +48,20 @@ export const getBlog = asyncHandler( async(req, res) => {
 
 export const getAllBlogs = asyncHandler(async(req, res) => {
     try{
-        const getBlogs = await Blog.findfind();
+        const getBlogs = await Blog.find();
         res.json(getBlogs)
     }catch(error){
         throw new Error(error)
     }
+});
+
+export const deleteBlog = asyncHandler( async(req, res) => {
+    const { id } = req.params;
+    try{
+        const deleteBlog = await Blog.findByIdAndDelete(id)
+        res.json(deleteBlog)
+    }catch(error){
+        throw new Error(error)
+    }
 })
+
