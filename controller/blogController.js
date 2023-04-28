@@ -30,16 +30,16 @@ export const getBlog = asyncHandler( async(req, res) => {
     const { id } = req.params
     try{
         const getABlog = await Blog.findById(id)
-        await Blog.findByIdAndUpdate(
+        const updateViews = await Blog.findByIdAndUpdate(
             id,
             {
-                $inc: { Views: 1 } 
+                $inc: { Views } 
             },
             {
                 new: true
             }            
         ) //$inc reps increment as oppose to set and val is set at 1
-        res.json(getABlog)
+        res.json(getABlog, updateViews)
     }catch(error){
         throw new Error(error)
     }
