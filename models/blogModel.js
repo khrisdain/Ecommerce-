@@ -25,18 +25,18 @@ var blogSchema = new mongoose.Schema({
         type: Boolean,
         default: false
     },
-    /**likes:[
+    likes:[
         {
-            type: mongoose.Schema.type.ObjectId,
+            type: mongoose.Schema.Types.ObjectId,
             ref: "User",
         },   
     ],
     dislikes:[
         {
-            type: mongoose.schema.types.ObjectId,
+            type: mongoose.Schema.Types.ObjectId,
             ref: "User"
         },
-    ],**/
+    ],
     image: {
         type: String,
         default: "https://www.shutterstock.com/image-photo/bloggingblog-concepts-ideas-white-worktable-1029506242"
