@@ -63,5 +63,55 @@ export const deleteBlog = asyncHandler( async(req, res) => {
     }catch(error){
         throw new Error(error)
     }
-})
+});
+
+
+export const likeBlog = asyncHandler( async(req, res) => {
+    const { blogId } = req.body;
+    validateMongoDBId(blogId);
+
+    //search for blog to be liked
+    const blog = await blog.findById(blogId);
+    // find the login user
+    const loginUserId = req?.user?._id;
+    //find if user has liked the blog
+    const isLiked = blog?.isLiked;
+    //check if user dislikes
+    const alreadyDisLikes = blog?.dislikes?.find(
+        (userId = userId?.toString() === loginUserId?.toString())
+    );
+
+    if(alreadyDisLikes) {
+        //$pull($: odm character) removs value from an array field in the document
+        const blog = await blog.findByIdAndUpdate(blogId, {
+            $pull: { dislikes: loginUserId },
+            isDisliked: false,
+        },
+        { new: true }
+      );
+      res.json(blog)
+    };
+
+    if(isLiked) {
+        const blog = await Blog.findByIdAndUpdate(
+            blogId,
+            {
+                $pull: { likes: loginUserId},
+                isLiked: true,
+            },
+            {new: true}
+        );
+        res.json(blog)
+    } else{
+        const blog = await Blog.findByIdAndUpdate(
+            blogId,
+            {
+                $push: { likes: loginUserId },
+                isLiked: true,
+            },
+            { new: true }
+        )
+        res.json(blog)
+    }
+});
 
