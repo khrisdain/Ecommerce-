@@ -15,7 +15,7 @@ router.post("/", authMiddleware, isAdmin, createBlog)
 router.get("/:id", getBlog)
 router.get("/", getAllBlogs)
 router.put("/:id", authMiddleware, isAdmin, updateBlog),
-router.put("/:blogId", authMiddleware, isAdmin, likeBlog)
-router.delete("/likes", authMiddleware, isAdmin, deleteBlog)
+router.put("/likes", authMiddleware, likeBlog)
+router.delete("/", authMiddleware, isAdmin, deleteBlog)
 
 export default router;
