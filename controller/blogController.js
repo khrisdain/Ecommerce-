@@ -29,7 +29,7 @@ export const updateBlog = asyncHandler( async(req, res) => {
 export const getBlog = asyncHandler( async(req, res) => {
     const { id } = req.params
     try{
-        const getABlog = await Blog.findById(id)
+        const getABlog = await Blog.findById(id).populate("likes")
         const updateViews = await Blog.findByIdAndUpdate(
             id,
             {
@@ -117,7 +117,8 @@ export const likeBlog = asyncHandler(async (req, res) => {
   });
 
 
-  export const disLikeBlog = asyncHandler(async (req, res) => {
+  
+  export const dislikeBlog = asyncHandler(async (req, res) => {
     const { blogId } = req.body;
     validateMongoDBId(blogId);
     // Find the blog which you want to be liked
@@ -125,7 +126,7 @@ export const likeBlog = asyncHandler(async (req, res) => {
     // find the login user
     const loginUserId = req?.user?._id;
     // find if the user has liked the blog
-    const isDisLiked = blog?.isDisLiked;
+    const isDisLiked = blog?.isDisliked;
     // find if the user has disliked the blog
     const alreadyLiked = blog?.likes?.find(
       (userId) => userId?.toString() === loginUserId?.toString()
@@ -163,4 +164,3 @@ export const likeBlog = asyncHandler(async (req, res) => {
       res.json(blog);
     }
   });
-//Resting for today i am sorry
