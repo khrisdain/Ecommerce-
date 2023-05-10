@@ -109,3 +109,4 @@ export const getAllProducts= asyncHandler( async(req, res) => {
         throw new Error(error)
     }
 })
+//taking rest 2
