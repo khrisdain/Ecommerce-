@@ -29,7 +29,7 @@ export const updateBlog = asyncHandler( async(req, res) => {
 export const getBlog = asyncHandler( async(req, res) => {
     const { id } = req.params
     try{
-        const getABlog = await Blog.findById(id).populate("likes")
+        const getABlog = await Blog.findById(id).populate("dislikes").populate("likes")
         const updateViews = await Blog.findByIdAndUpdate(
             id,
             {
@@ -39,7 +39,7 @@ export const getBlog = asyncHandler( async(req, res) => {
                 new: true
             }            
         ) //$inc reps increment as oppose to set and val is set at 1
-        res.json(updateViews)
+        res.json(getABlog)
     }catch(error){
         throw new Error(error)
     }
