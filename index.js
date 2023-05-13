@@ -7,6 +7,7 @@ import dbConnect from "./config/dbConnect.js";
 import authRouter from "./routes/authRouter.js";
 import productRouter from "./routes/productRouter.js";
 import blogRouter from "./routes/blogRouter.js";
+import categoryRouter from "./routes/categoryRouter.js";
 import cookieParser from "cookie-parser";
 import morgan from "morgan";
 import {notFound, errorHandler} from "./middlewares/errorHandler.js";
@@ -26,6 +27,7 @@ app.use(cookieParser()); //
 app.use("/api/user", authRouter);
 app.use("/api/product", productRouter);
 app.use("/api/blog", blogRouter);
+app.use("/api/category", categoryRouter);
 
 app.use(notFound);
 app.use(errorHandler)
