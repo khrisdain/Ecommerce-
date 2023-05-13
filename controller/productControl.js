@@ -39,7 +39,6 @@ export const updateProduct = asyncHandler(async (req, res) => {
 //DELETE A PRODUCT
 export const deleteProduct = asyncHandler( async(req, res) => {
     const {id} = req.params;
-    console.log(req.params)
     try{
         const deleteProduct = await Product.findOneAndDelete({_id: id});
         res.json(deleteProduct);
