@@ -178,7 +178,6 @@ export const blockUser = asyncHandler( async(req, res) => {
 //UNBLOCK A USER
 export const unblockUser = asyncHandler( async(req, res) => {
     const { _id } = req.user
-    console.log(req.user)
     validateMongoDBId( _id )
 
     try{
