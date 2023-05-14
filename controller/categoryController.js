@@ -23,4 +23,15 @@ export const updateCategory = asyncHandler( async(req, res) => {
     }catch(error){
         throw new Error(error)
     }
-})
+});
+
+//delete p.c: admin
+export const deleteCategory = asyncHandler( async(req, res) => {
+    const { id } = req.params
+    try{
+        const deletedCategory = await Category.findByIdAndDelete(id)
+        res.json(deletedCategory)
+    }catch(error){
+        throw new Error(error)
+    }
+});
