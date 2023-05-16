@@ -17,6 +17,7 @@ export const createCategory = asyncHandler(async(req, res) => {
 //update p.c: admin
 export const updateCategory = asyncHandler( async(req, res) => {
     const { id } = req.params;
+    validateMongoDBId(id)
     try{
         const updateCategory = await Category.findByIdAndUpdate(id, req.body,{new: true}); //id, optiton, change on submission
         res.json(updateCategory)
@@ -31,6 +32,19 @@ export const deleteCategory = asyncHandler( async(req, res) => {
     try{
         const deletedCategory = await Category.findByIdAndDelete(id)
         res.json(deletedCategory)
+    }catch(error){
+        throw new Error(error)
+    }
+});
+
+
+//fetch a category 
+export const getCategory = asyncHandler( async(req, res) => {
+    const { id } = req.params;
+    validateMongoDBId(id)
+    try{
+        const getCategory = await Category.findById(id);
+        res.json(getCategory);
     }catch(error){
         throw new Error(error)
     }
