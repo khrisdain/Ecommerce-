@@ -14,3 +14,4 @@ const blogCatModel = new mongoose.Schema({
 const blogCategory = mongoose.model("BlogCategory", blogCatModel);
 
 export default blogCategory;
+//Taking a rest today
