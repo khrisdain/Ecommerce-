@@ -1,5 +1,4 @@
 import express from "express";
-import bcrypt from "bcrypt";
 import bodyParser from "body-parser"
 import dotenv from "dotenv";
 import cors from "cors";
@@ -16,7 +15,7 @@ import {notFound, errorHandler} from "./middlewares/errorHandler.js";
 
 dotenv.config();
 const app = express();
-const PORT = process.env.PORT || 4000;
+const PORT = process.env.PORT || 3001;
 dbConnect();
 
 app.use(morgan("dev"))
