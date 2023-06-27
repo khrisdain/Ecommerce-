@@ -15,7 +15,7 @@ import {notFound, errorHandler} from "./middlewares/errorHandler.js";
 
 dotenv.config();
 const app = express();
-const PORT = process.env.PORT || 3001;
+const PORT = process.env.PORT || 5000;
 dbConnect();
 
 app.use(morgan("dev"))
