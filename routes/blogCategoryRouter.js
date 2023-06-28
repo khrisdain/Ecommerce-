@@ -15,3 +15,4 @@ router.post("/", authMiddleware, isAdmin, createBlogCategory)
 router.put("/:id", authMiddleware, isAdmin, updateBlogCategory)
 router.delete("/:id", authMiddleware, isAdmin, deleteBlogCategory)
 export default router;
+//Taking a rest
