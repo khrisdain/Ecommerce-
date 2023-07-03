@@ -1,5 +1,6 @@
 import Product from "../models/productModel.js";
 import asyncHandler from "express-async-handler";
+import User from "../models/userModel.js";
 import slugify from "slugify";
 import { validateMongoDBId } from "../utils/validateMongodbId.js";
 
@@ -82,7 +83,7 @@ export const getAllProducts= asyncHandler( async(req, res) => {
             query = query.sort("-createdAt")
         }
 
-        //limiting the fields to only
+        //limiting the fields to only one query
         if(req.query.fields) {
             const fields = req.query.fields.split(",").join(" ");
             query = query.select(fields);
@@ -107,5 +108,23 @@ export const getAllProducts= asyncHandler( async(req, res) => {
     catch(error){
         throw new Error(error)
     }
+});
+
+
+export const addToWishList = asyncHandler( async(req, res) => {
+    const { _id } = req.user;
+    const { prodId } = req.body;
+    try{
+        const user = User.findById(_id);
+        const alreadyAdded = user.wishlist.find((id) => id.toString() === prodId); //checks for existing similar id
+        if(alreadyAdded){
+            let user = await User.findByIdAndUpdate(
+                _id,
+                {
+                    $pull                }
+            )
+        }
+    }catch(error){
+        throw new Error(error)
+    }
 })
-//taking rest 2
