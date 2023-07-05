@@ -5,12 +5,14 @@ import {
     getAllProducts,
     updateProduct,
     deleteProduct,
+    addToWishlist
 } from "../controller/productControl.js";
 import { isAdmin, authMiddleware } from "../middlewares/authMiddleware.js";
 
 const router = express.Router()
 
 router.post("/", authMiddleware, isAdmin, createProduct)
+router.put("/wishlist", authMiddleware, isAdmin, addToWishlist)
 router.put("/:id", authMiddleware, isAdmin, updateProduct)
 router.delete("/:id", authMiddleware, isAdmin, deleteProduct)
 router.get("/:id", getAProduct)
