@@ -11,7 +11,7 @@ var productSchema = new mongoose.Schema({
         type:String,
         required:true,
         unique:true,
-        lowercase: true,
+        lowercase: true,                                                                                  
     },
     description:{
         type:String,
@@ -50,7 +50,8 @@ var productSchema = new mongoose.Schema({
         },
     ],
     totalrating: {
-        type: String
+        type: String,
+        default: 0,
     }
 }, {timestamps: true})
 
