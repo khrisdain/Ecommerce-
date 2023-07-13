@@ -154,6 +154,9 @@ export const rating = asyncHandler(async(req, res) => {
       if(alreadyRated) {
         const updateRating = await Product.updateOne({
             ratings: { $elemMatch: alreadyRated }
+        },
+        {
+            $set: {"ratings.$.star": star}
         }
         );
         res.json(updateRating)
