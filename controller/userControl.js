@@ -148,12 +148,13 @@ export const getUser = asyncHandler( async (req, res) => {
 
 //DELETE A USER
 export const deleteUser = asyncHandler( async(req, res) => {
-    const { _id } = req.user;
-    validateMongoDBId( _id )
-
+    const { id } = req.params; //specific application of the 'req' properties 
+    validateMongoDBId(id)
     try{
-        const deleteuser = await User.findByIdAndDelete(_id);
-        res.json({ deleteuser })
+        const deleteaUser = await User.findByIdAndDelete(id);
+        res.json({
+            deleteaUser
+        });
     }
     catch(error){
         throw new Error(error)

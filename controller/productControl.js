@@ -145,23 +145,26 @@ export const addToWishlist = asyncHandler( async(req, res) => {
 });
 
 
+//fix bug later 
 export const rating = asyncHandler(async(req, res) => {
     const { _id } = req.user;
-    const { star, prodId } = req.body;
+    const { star, prodId, comment } = req.body;
     try{
       const product = await Product.findById(prodId);    
       let alreadyRated = product.ratings.find(
-        ({userId}) => userId?.postedby.toString() === _id.toString()
+        ({userId}) => userId?.postedBy.toString() === _id.toString()
         );
       if(alreadyRated) {
         const updateRating = await Product.updateOne({
             ratings: { $elemMatch: alreadyRated }
         },
         {
-            $set: {"ratings.$.star": star}
-        }
+            $set: {"ratings.$.star": star, "ratings.$.comment": comment}
+        },
+        {
+            new: true
+        },
         );
-        res.json(updateRating)
       }else{
         const rateProducts = await Product.findByIdAndUpdate(
             prodId,
@@ -169,6 +172,7 @@ export const rating = asyncHandler(async(req, res) => {
                 $push: {
                     ratings: {
                         star: star,
+                        comment: comment, 
                         postedBy: _id
                     }
                 },
@@ -177,10 +181,26 @@ export const rating = asyncHandler(async(req, res) => {
                 new: true,
             }
         );
-        res.json(rateProducts);
       }
-    }
-    catch(error){
+    const getAllRatings = await Product.findById(prodId);
+    let totalRatings = getAllRatings.ratings.length; //sets length of array
+    let ratingSum = getAllRatings.ratings
+    .map((item) => item.star)//gives an array 
+    .reduce((prev,curr) => prev + curr, 0); //helps to sum the total array in map
+    let actualRating = Math.round(ratingSum / totalRatings);
+    const finalRating = await Product.findByIdAndUpdate(
+        prodId,
+        {
+            totalratings: actualRating,
+        },
+        { new: true }
+    )
+    res.json(finalRating)
+    }catch(error){
         throw new Error(error)
-    }
-})
+    }    
+}); 
+
+
+
+

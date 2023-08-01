@@ -9,6 +9,7 @@ import blogRouter from "./routes/blogRouter.js";
 import categoryRouter from "./routes/categoryRouter.js";
 import blogCategoryRouter from "./routes/blogCategoryRouter.js";
 import brandRouter from "./routes/brandRouter.js";
+import couponRouter from "./routes/couponRouter.js"
 import cookieParser from "cookie-parser";
 import morgan from "morgan";
 import {notFound, errorHandler} from "./middlewares/errorHandler.js";
@@ -30,7 +31,8 @@ app.use("/api/product", productRouter);
 app.use("/api/blog", blogRouter);
 app.use("/api/category", categoryRouter);
 app.use("/api/blogCategory", blogCategoryRouter);
-app.use("/api/brand", brandRouter)
+app.use("/api/brand", brandRouter);
+app.use("/api/coupon", couponRouter);
 
 app.use(notFound);
 app.use(errorHandler)
