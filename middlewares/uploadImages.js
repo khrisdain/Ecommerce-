@@ -23,9 +23,14 @@ const multerFilter = (req, file, cb) => {
         cb(null, true)
     }
     else{
-        cb({ message:"Unsupported file format"})
+        cb(
+            { 
+                message:"Unsupported file format"
+            },
+            false
+        );
     }
-}
+};
 
 /*multer handles the multipart/form-data for the various file that are to be
 uploaded (node.js middleware) */
@@ -34,3 +39,17 @@ export const uploadPhoto = multer({
  fileFilter: multerFilter,
  limits: { fieldSize: 2000000}
 })
+
+export const productImgResize = async( req, res, next ) => {
+    if(!req.files) return next();
+    await Promise.all(
+        req.file.map(async(file) => {
+            await sharp(file.path)
+                .resize(300,300)
+                .toFormat("jpeg")
+                .jpeg({ quality: 90})
+                .toFile(`public/images/producets/${file.filename}`)
+        })
+    );
+    next();
+};
