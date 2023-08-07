@@ -203,4 +203,7 @@ export const rating = asyncHandler(async(req, res) => {
 
 
 
+export const uploadImages = asyncHandler( async(req, res) => {
+    console.log(req.files)
+})
 
