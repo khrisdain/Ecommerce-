@@ -1,4 +1,4 @@
-import multer from "mmulter";
+import multer from "multer";
 import sharp from "sharp";
 import path from "path"
 
@@ -40,6 +40,9 @@ export const uploadPhoto = multer({
  limits: { fieldSize: 2000000}
 })
 
+
+/*sharp is implemented in the async to help convert lage image sizes to more 
+friendly jpeg, PNG, webPif and gif  */
 export const productImgResize = async( req, res, next ) => {
     if(!req.files) return next();
     await Promise.all(
@@ -53,3 +56,20 @@ export const productImgResize = async( req, res, next ) => {
     );
     next();
 };
+
+
+
+export const blogImgResize = async( req, res, next ) => {
+    if(!req.files) return next();
+    await Promise.all(
+        req.file.map(async(file) => {
+            await sharp(file.path)
+                .resize(300,300)
+                .toFormat("jpeg")
+                .jpeg({ quality: 90})
+                .toFile(`public/images/producets/${file.filename}`)
+        })
+    );
+    next();
+};
+
