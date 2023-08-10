@@ -1,13 +1,14 @@
 import multer from "multer";
 import sharp from "sharp";
-import * as path from "path"
+import path from "path"
+
 
 /*diskStorage is preferred here as it grants total control on storing
 our file on disk( alternatively: MemoryStorage) */
 const multerStorage = multer.diskStorage({
     destination: function ( req, file, cb){
         /*cb hanldes uncommon(overlooked) callback scenarios  */
-        cb(null, path.join( _dirname, "../public/images/"));
+        cb(null, path.join(__dirname, "../public/images"));
     },
     filename: function (req, file, cb){
         const uniqueSuffix = Date.now() + "-"+ Math.round(Math.random() * 1E9);
