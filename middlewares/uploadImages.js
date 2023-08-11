@@ -1,14 +1,18 @@
 import multer from "multer";
 import sharp from "sharp";
-import path from "path"
+import { fileURLToPath } from "url"; 
+import { dirname } from "path"
+import * as path from "path"
 
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = dirname(__filename)
 
 /*diskStorage is preferred here as it grants total control on storing
 our file on disk( alternatively: MemoryStorage) */
-const multerStorage = multer.diskStorage({
+const storage = multer.diskStorage({
     destination: function ( req, file, cb){
         /*cb hanldes uncommon(overlooked) callback scenarios  */
-        cb(null, path.join(__dirname, "../public/images"));
+        cb(null, path.join(__dirname, '../public/images'));
     },
     filename: function (req, file, cb){
         const uniqueSuffix = Date.now() + "-"+ Math.round(Math.random() * 1E9);
@@ -36,7 +40,7 @@ const multerFilter = (req, file, cb) => {
 /*multer handles the multipart/form-data for the various file that are to be
 uploaded (node.js middleware) */
 export const uploadPhoto = multer({
- storage: multerStorage,
+ storage: storage,
  fileFilter: multerFilter,
  limits: { fieldSize: 2000000}
 })
