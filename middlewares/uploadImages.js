@@ -48,7 +48,7 @@ export const uploadPhoto = multer({
 
 /*sharp is implemented in the async to help convert lage image sizes to more 
 friendly jpeg, PNG, webPif and gif  */
-export const productImgResize = async( req, res, next ) => {
+/*export const productImgResize = async( req, res, next ) => {
     if(!req.files) return next();
     await Promise.all(
         req.file.map(async(file) => {
@@ -60,7 +60,7 @@ export const productImgResize = async( req, res, next ) => {
         })
     );
     next();
-};
+};*/
 
 
 
