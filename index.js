@@ -12,8 +12,6 @@ import brandRouter from "./routes/brandRouter.js";
 import couponRouter from "./routes/couponRouter.js"
 import cookieParser from "cookie-parser";
 import morgan from "morgan";
-import { fileURLToPath } from "url";
-import * as path from 
 import {notFound, errorHandler} from "./middlewares/errorHandler.js";
 
 
