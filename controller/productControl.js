@@ -205,16 +205,18 @@ export const rating = asyncHandler(async(req, res) => {
 
 
 export const uploadImages = asyncHandler( async(req, res) => {
-    const id = req.params;
-    validateMongoDBId(id)
+    const { id } = req.params;
+    validateMongoDBId( id);
+    console.log(req.files)
 
     try{
         const uploader = (path) => cloudinaryUploadimg(path, "images");
         const urls = [];
         const files = req.files; 
         for (const file of files) { //output expected: req.files
-            const { path } = files;
+            const { path } = file;
             const newPath = await uploader(path);
+            console.log(newPath);
             urls.push(newPath);
         }
         const findProduct = await Product.findByIdAndUpdate( id, 
