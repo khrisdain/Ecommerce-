@@ -2,6 +2,7 @@ import Blog from "../models/blogModel.js";
 import User from "../models/userModel.js";
 import asyncHandler from "express-async-handler";
 import { validateMongoDBId } from "../utils/validateMongodbId.js";
+import { cloudinaryUploadimg } from "../utils/cloudinary.js";
 
 export const createBlog = asyncHandler( async(req, res) => {
     try{
@@ -164,4 +165,36 @@ export const likeBlog = asyncHandler(async (req, res) => {
       res.json(blog);
     }
   });
-  //resting for todays thanks
+
+
+
+  //add images to the Blog
+  export const uploadBlogImages = asyncHandler(async (req, res) => {
+    const { id } = req.params;
+    validateMongoDBId(id);
+    try {
+      const uploader = (path) => cloudinaryUploadimg(path, "images");
+      const urls = [];
+      const files = req.files;
+      for (const file of files) {
+        const { path } = file;
+        const newpath = await uploader(path);
+        console.log(newpath);
+        urls.push(newpath);
+      }
+      const findBlog = await Blog.findByIdAndUpdate(
+        id,
+        {
+          images: urls.map((file) => {
+            return file;
+          }),
+        },
+        {
+          new: true,
+        }
+      );
+      res.json(findBlog);
+    } catch (error) {
+      throw new Error(error);
+    }
+  });

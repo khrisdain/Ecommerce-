@@ -4,23 +4,17 @@ import dotenv from "dotenv";
 dotenv.config()
           
 cloudinary.config({ 
-  cloud_name: process.env.CLOUD_NAME, 
-  api_key: process.env.API_KEY, 
-  api_secret: process.env.SECRET_KEY, 
-  secure: true
+  cloud_name: "dpjozw1nb", 
+  api_key: "851518668842429", 
+  api_secret: "VqvaLUxC06KULpLNheuU1f-PvKQ", 
 });
 
 export const cloudinaryUploadimg = async (fileToUploads) => {
     return new Promise((resolve) =>  {
-        cloudinary.uploader.upload(fileToUploads, (result) => {
+        cloudinary.uploader.upload(fileToUploads, (results) => {
             resolve(
-                {
-                    url: result.secure_url
-                },
-                {
-                    resource_type: "auto"
-                }
+                fileToUploads
             )
+        });
         })
-    })
 }

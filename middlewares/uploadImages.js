@@ -55,23 +55,22 @@ export const productImgResize = async( req, res, next) => {
                 .resize(300,300)
                 .toFormat("jpeg")
                 .jpeg({ quality: 90})
-                .toFile(`public/images/producets/${file.filename}`)
+                .toFile(`public/images/products/${file.filename}`)
         })
     );
     next();
 };
 
 
-
-export const blogImgResize = async( req, res, next ) => {
-    if(!req.files) return next();
-    await Promise.all(
+export const blogImgResize = async( req, res, next) => {
+    if(!req.file) return next();
+    await promise.all(
         req.file.map(async(file) => {
             await sharp(file.path)
                 .resize(300,300)
                 .toFormat("jpeg")
                 .jpeg({ quality: 90})
-                .toFile(`public/images/producets/${file.filename}`)
+                .toFile(`public/images/products/${file.filename}`)
         })
     );
     next();

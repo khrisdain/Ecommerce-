@@ -2,6 +2,7 @@ import Product from "../models/productModel.js";
 import asyncHandler from "express-async-handler";
 import User from "../models/userModel.js";
 import slugify from "slugify";
+import fs from "fs"
 import { validateMongoDBId } from "../utils/validateMongodbId.js";
 import { cloudinaryUploadimg } from "../utils/cloudinary.js"; 
 
@@ -218,6 +219,7 @@ export const uploadImages = asyncHandler( async(req, res) => {
             const newPath = await uploader(path);
             console.log(newPath);
             urls.push(newPath);
+            fs.unlinkSync(path); //removes the link from URl from the filesystem sychronously
         }
         const findProduct = await Product.findByIdAndUpdate( id, 
             {

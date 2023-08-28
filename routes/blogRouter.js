@@ -7,6 +7,7 @@ import {
     deleteBlog,
     likeBlog,
     dislikeBlog,
+    uploadBlogImages,
 } from "../controller/blogController.js"
 import { authMiddleware, isAdmin} from "../middlewares/authMiddleware.js"
 import { blogImgResize, uploadPhoto } from "../middlewares/uploadImages.js"
@@ -17,7 +18,12 @@ router.post("/", authMiddleware, isAdmin, createBlog)
 router.put("/likes", authMiddleware, likeBlog)
 router.put("/dislikes", authMiddleware, dislikeBlog)
 router.put(
-    "/upload"
+    "/upload/:id",
+    authMiddleware,
+    isAdmin,
+    uploadPhoto.array("images", 2),
+    blogImgResize,
+    uploadBlogImages,
 )
 router.put("/:id", authMiddleware, isAdmin, updateBlog)
 
