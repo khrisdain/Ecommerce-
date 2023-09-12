@@ -1,8 +1,9 @@
 import multer from "multer";
 import sharp from "sharp";
 import { fileURLToPath } from "url"; 
-import { dirname } from "path"
-import * as path from "path"
+import { dirname } from "path";
+import * as path from "path";
+import fs from "fs";
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename)
@@ -56,6 +57,7 @@ export const productImgResize = async( req, res, next) => {
                 .toFormat("jpeg")
                 .jpeg({ quality: 90})
                 .toFile(`public/images/products/${file.filename}`)
+            fs.unlinkSync(`public/images/products/${file.filename}`)
         })
     );
     next();
@@ -71,7 +73,9 @@ export const blogImgResize = async( req, res, next) => {
                 .toFormat("jpeg")
                 .jpeg({ quality: 90})
                 .toFile(`public/images/products/${file.filename}`)
+            fs.unlinkSync(`public/images/products/${file.filename}`)
         })
+
     );
     next();
 };
