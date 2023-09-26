@@ -112,6 +112,7 @@ export const getAllProducts= asyncHandler( async(req, res) => {
 });
 
 
+//add to wishlist
 export const addToWishlist = asyncHandler( async(req, res) => {
     const { _id } = req.user;
     const { prodId } = req.body;
@@ -208,8 +209,6 @@ export const rating = asyncHandler(async(req, res) => {
 export const uploadImages = asyncHandler( async(req, res) => {
     const { id } = req.params;
     validateMongoDBId( id);
-    console.log(req.files)
-
     try{
         const uploader = (path) => cloudinaryUploadimg(path, "images");
         const urls = [];
@@ -217,7 +216,7 @@ export const uploadImages = asyncHandler( async(req, res) => {
         for (const file of files) { //output expected: req.files
             const { path } = file;
             const newPath = await uploader(path);
-            console.log(newPath);
+
             urls.push(newPath);
             fs.unlinkSync(path); //removes the link from URl from the filesystem sychronously
         }
