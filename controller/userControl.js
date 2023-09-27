@@ -1,11 +1,13 @@
-import User from "../models/userModel.js";
-import asyncHandler from "express-async-handler";
+import crypto from "crypto"
 import jwt  from "jsonwebtoken";
+import User from "../models/userModel.js";
+import Cart from "../models/cartModel.js";
+import Product from "../models/productModel.js";
+import asyncHandler from "express-async-handler";
+import { sendEmail }from "./emailController.js"
 import { generateToken } from "../config/jwtTokens.js";
 import { validateMongoDBId } from "../utils/validateMongodbId.js";
 import { generateRefreshToken } from "../config/refreshToken.js";
-import { sendEmail }from "./emailController.js"
-import crypto from "crypto"
 
 //CREATE A NEW USER
 export const createUser = asyncHandler(async (req, res) => {
@@ -22,6 +24,43 @@ export const createUser = asyncHandler(async (req, res) => {
 
 
 //LOGIN A USER
+export const loginAdmin = asyncHandler( async (req, res) => {
+    //param: email and password
+    const { email, password } = req.body;
+
+    /*Selects User infor for correlation of database info  */
+    const findAdmin = await User.findOne({ email });
+    if(findAdmin.role !== "admin") throw new Error("Not authorized user");
+    if(findAdmin && await findAdmin.isPasswordMatched(password)){
+        const refreshToken = await generateRefreshToken(findAdmin?._id);
+        const updateUser = await User.findByIdAndUpdate(
+            findUser.id,
+            {
+                refreshToken: refreshToken
+            },
+            {new: true} 
+        );
+        //assigned req.cookies value 
+        res.cookie("refreshToken", refreshToken, {
+            httpOnly: true,
+            maxAge: 72 * 60 * 60 * 1000,
+        });
+        res.json({
+            _id: findAdmin?._id,
+            firstname: findAdmin?.firstname,
+            lastname: findAdmin?.lastname,
+            email: findAdmin?.email,
+            mobile: findAdmin?.mobile,
+            token: generateToken(findAdmin?._id)
+        })    
+    }else{
+        throw new Error("Invalid Credential")
+    }
+
+});
+
+
+//Log in Admin
 export const loginUserControl = asyncHandler( async (req, res) => {
     //param: email and password
     const { email, password } = req.body;
@@ -55,6 +94,8 @@ export const loginUserControl = asyncHandler( async (req, res) => {
     }
 
 });
+
+
 
 //handle Refresh Token
 export const handleRefreshToken = asyncHandler( async(req, res) => {
@@ -119,6 +160,26 @@ export const updatedUser = asyncHandler( async(req, res) => {
         throw new Error(error)
     }
 });
+
+
+//SAVE A USER ADDRESS
+export const saveAddress = asyncHandler( async( req, res, next) => {
+    const { _id } = req.user;
+    try{
+        const updatedUser = await User.findByIdAndUpdate(
+            _id,
+            { address: req?.body?.address },  
+            {
+                new: true,
+            }
+        );
+        res.json(updatedUser)
+    } catch(error){
+        throw new Error(error)
+    }
+})
+
+
 
 //GET ALL USERS 
 export const getAllUsers = asyncHandler( async (req, res) => {
@@ -245,4 +306,35 @@ export const resetPassword = asyncHandler( async(req, res) => {
     user.passwordResetExpires = undefined;
     await user.save()
     console.log(user)
+})
+
+
+
+//fetch users wishlist 
+export const getWishlist = asyncHandler( async(req, res) => {
+    const { _id } = req.user;
+    try{
+        const findUser = await User.findById(_id).populate("wishlist") //mongoDB populate**
+        res.json(findUser)
+    } catch(error){
+        throw new Error(error)
+    }
+})
+
+
+//USERS CART
+export const useCart = asyncHandler( async( req, res) => {
+    const { cart } = req.body;
+    const { _id } = req.user;
+    try{
+        let products = []
+        const user = await User.findById(_id)
+        //check if user already have product in the cart
+        const alreadyExistInCart = await Cart.findOne({ orderby: user?._id})
+        if(alreadyExistInCart){
+            alreadyExistInCart.remove()
+        }
+    } catch(error) {
+        throw new Error(error)
+    }
 })
