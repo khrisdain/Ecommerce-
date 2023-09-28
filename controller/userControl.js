@@ -330,10 +330,22 @@ export const useCart = asyncHandler( async( req, res) => {
         let products = []
         const user = await User.findById(_id)
         //check if user already have product in the cart
-        const alreadyExistInCart = await Cart.findOne({ orderby: user?._id})
+        const alreadyExistInCart = await Cart.findOne({ orderby: user._id})
         if(alreadyExistInCart){
             alreadyExistInCart.remove()
+        };
+        //for each item in the cart and object is created containing listed objects. 
+        for( let i = 0; i < cart.length; i++) {
+            let object = {};
+            object.product = cart[i]._id;
+            object.count = cart[i].count;
+            object.price = cart[i].price;
+
+            let getPrice = await Product.findById(cart[i]._id).select("price").exec();
+            object.price = getPrice.price;
+            products.push(object);
         }
+        console.log(products)
     } catch(error) {
         throw new Error(error)
     }
