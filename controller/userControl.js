@@ -326,6 +326,7 @@ export const getWishlist = asyncHandler( async(req, res) => {
 export const useCart = asyncHandler( async( req, res) => {
     const { cart } = req.body;
     const { _id } = req.user; //populated by authorization middleware
+    
     try{
         let products = []
         const user = await User.findById(_id)
