@@ -326,6 +326,7 @@ export const getWishlist = asyncHandler( async(req, res) => {
 export const useCart = asyncHandler( async( req, res) => {
     const { cart } = req.body;
     const { _id } = req.user; //populated by authorization middleware
+    validateMongoDBId(_id);
     
     try{
         let products = []
@@ -342,11 +343,11 @@ export const useCart = asyncHandler( async( req, res) => {
             object.count = cart[i].count;
             object.price = cart[i].price;
 
-            let getPrice = await Product.findById(cart[i]._id).select("price").exec();
+            let getPrice = await Product.findById(cart[i]._id).select("price").exec(); //select and execute gotten from
             object.price = getPrice.price;
             products.push(object);
         }
-        console.log(products)
+        console.log(object)
     } catch(error) {
         throw new Error(error)
     }
