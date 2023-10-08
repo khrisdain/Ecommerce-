@@ -341,18 +341,34 @@ export const useCart = asyncHandler( async( req, res) => {
             let object = {};
             object.product = cart[i]._id;
             object.count = cart[i].count;
-            object.price = cart[i].price;
+            object.color = cart[i].color;
 
-            let getPrice = await Product.findById(cart[i]._id).select("price").exec(); //select and execute gotten from
+            /*Checks Poduct model and find corresponding product Id to get the specific product type and query the product data set 
+            to return the "price" field and exec() executes the Product Model i.e handles the promise
+            */
+            let getPrice = await Product.findById(cart[i]._id).select("price").exec();
             object.price = getPrice.price;
             products.push(object);
         }
-        console.log(object)
+        //To get total item in cart
+        let cartTotal = 0
+        for(let i = 0; i < products.length; i++){
+            //Multiply the toatl price of goods with the particular item count
+            cartTotal = cartTotal + products[i].price * products[i].count;
+        }
+        console.log(products, cartTotal)
+        //assign and save values of cart(products and cartTotal) to Match with the Cart Model's schema
+        const newCart = await new Cart({
+            products,
+            cartTotal,
+            orderby: user?._id
+        }).save();
+        res.json(newCart)
     } catch(error) {
         throw new Error(error)
     }
 })
 
-//rest
+ 
 
 
