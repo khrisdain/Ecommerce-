@@ -356,12 +356,12 @@ export const useCart = asyncHandler( async( req, res) => {
             //Multiply the toatl price of goods with the particular item count
             cartTotal = cartTotal + products[i].price * products[i].count;
         }
-        console.log(products, cartTotal)
+        console.log(cartTotal)
         //assign and save values of cart(products and cartTotal) to Match with the Cart Model's schema
-        const newCart = await new Cart({
+        let newCart = await new Cart({
             products,
             cartTotal,
-            orderby: user?._id
+            orderby:user?._id
         }).save();
         res.json(newCart)
     } catch(error) {
@@ -369,6 +369,22 @@ export const useCart = asyncHandler( async( req, res) => {
     }
 })
 
+
+//fetch a users Cart
+export const getUserCart = asyncHandler( async(req, res) => {
+    const { _id } = req.user;
+    validateMongoDBId(_id)
+
+    try{
+        const cart = await Cart.findOne({ orderby: _id })
+        res.json(cart)
+    }
+    catch(error){
+        throw new Error(error)
+    }
+})
+
  
+
 
 
