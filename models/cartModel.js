@@ -7,20 +7,19 @@ const cartSchema = new mongoose.Schema(
             {
                 products: {
                     type: mongoose.Schema.Types.ObjectId,
-                    ref: "Product",
+                    ref: "Product", //Refernces data from the product Model
                 },
                 count: Number,
                 color: String,
                 price: Number,
             },
-            {
-                totalAfterDiscount: Number,
-                orderby: {
-                    type: mongoose.Schema.Types.ObjectId,
-                    ref: "User",
-                }
-            }
-        ]
+        ],
+            cartTotal: Number,  
+            totalAfterDiscount: Number,
+            orderby: {
+                type: mongoose.Schema.Types.ObjectId,
+                ref: "User", //refrences data collection in the User model 
+            },
     },
     {
         timestamps: true,
