@@ -17,6 +17,7 @@ import {
     getWishlist,
     saveAddress,
     useCart,
+    getUserCart
  } from "../controller/userControl.js";
 import { authMiddleware, isAdmin } from "../middlewares/authMiddleware.js";
 
@@ -31,6 +32,7 @@ router.post("/admin-login", authMiddleware, isAdmin, loginAdmin)
 router.post("/forgot-password-token", forgotPasswordToken)
 router.get("/all-users", getAllUsers);
 router.get("/refresh", handleRefreshToken);
+router.get("/cart", authMiddleware, getUserCart)
 router.post("/logout", logout)
 router.get("/:id", authMiddleware, isAdmin, getUser);
 router.get("/wishlist", authMiddleware, getWishlist)
