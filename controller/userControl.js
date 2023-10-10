@@ -2,6 +2,7 @@ import crypto from "crypto"
 import jwt  from "jsonwebtoken";
 import User from "../models/userModel.js";
 import Cart from "../models/cartModel.js";
+import Coupon from "../models/couponModel.js"
 import Product from "../models/productModel.js";
 import asyncHandler from "express-async-handler";
 import { sendEmail }from "./emailController.js"
@@ -373,16 +374,38 @@ export const useCart = asyncHandler( async( req, res) => {
 //fetch a users Cart
 export const getUserCart = asyncHandler( async(req, res) => {
     const { _id } = req.user;
+    console.log(_id)
     validateMongoDBId(_id)
 
     try{
-        const cart = await Cart.findOne({ orderby: _id })
+        //populate allows mongoose to reference documents in another colllection in the database
+        //populate allows us to replace the specified paths in a document with other data from other documents
+        const cart = await Cart.findOne({ orderby: _id }).populate("products.product")
         res.json(cart)
     }
     catch(error){
         throw new Error(error)
     }
-})
+});
+
+
+export const emptyCart = asyncHandler(async (req, res) => {
+    const { _id } = req.user;
+    validateMongoDBId(_id);
+    try {
+      const user = await User.findOne({ _id });
+      const cart = await Cart.findOneAndRemove({ orderby: user._id });
+      res.json(cart);
+    } catch (error) {
+      throw new Error(error);
+    }
+  });
+
+
+  export const applyCoupon = asyncHandler( async( req, res) => {
+    const { coupon } = req.body;
+    const validCoupon = await Coupon.findOne({ name: coupon})
+  })
 
  
 
