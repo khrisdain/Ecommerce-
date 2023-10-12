@@ -404,7 +404,8 @@ export const emptyCart = asyncHandler(async (req, res) => {
 
   export const applyCoupon = asyncHandler( async( req, res) => {
     const { coupon } = req.body;
-    const validCoupon = await Coupon.findOne({ name: coupon})
+    const validCoupon = await Coupon.findOne({ name: coupon});
+    console.log(validCoupon);
   })
 
  
