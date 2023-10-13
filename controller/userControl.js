@@ -404,8 +404,20 @@ export const emptyCart = asyncHandler(async (req, res) => {
 
   export const applyCoupon = asyncHandler( async( req, res) => {
     const { coupon } = req.body;
+    const { _id } = req.user;
+    //check validity of coupon from the Coupon DB
     const validCoupon = await Coupon.findOne({ name: coupon});
-    console.log(validCoupon);
+    if( validCoupon === null){
+        throw new Error("Invalid Coupon")
+    }
+    const user = await User.findOne({ _id });
+    let { products, cartTotal} = await Cart.findOne({
+        orderby: user._id,
+    }).populate("products.product")
+
+    //totalAfterDiscount ==> Cart Schema
+    //resting today
+    let totalAfterDiscount = 
   })
 
  
