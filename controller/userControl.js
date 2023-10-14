@@ -416,8 +416,18 @@ export const emptyCart = asyncHandler(async (req, res) => {
     }).populate("products.product")
 
     //totalAfterDiscount ==> Cart Schema
-    //resting today
-    let totalAfterDiscount = 
+    //cartTotal from user checkout/ validCoupon checks for validity and take sub property discount
+    //takes total of bracket, divide by 100 and subtract from original cart value
+    //toFixed floats to decimal place i.e "100.00" 
+    let totalAfterDiscount = (
+        cartTotal - 
+        ( cartTotal * validCoupon.discount) / 100
+        ).toFixed(2);
+    await Cart.findOneAndUpdate(
+        { orderby: user?._id },
+        { totalAfterDiscount},
+        { new: true});
+    res.json(totalAfterDiscount);
   })
 
  
