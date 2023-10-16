@@ -402,7 +402,8 @@ export const emptyCart = asyncHandler(async (req, res) => {
   });
 
 
-  export const applyCoupon = asyncHandler( async( req, res) => {
+
+export const applyCoupon = asyncHandler( async( req, res) => {
     const { coupon } = req.body;
     const { _id } = req.user;
     //check validity of coupon from the Coupon DB
@@ -411,9 +412,9 @@ export const emptyCart = asyncHandler(async (req, res) => {
         throw new Error("Invalid Coupon")
     }
     const user = await User.findOne({ _id });
-    let { products, cartTotal} = await Cart.findOne({
+    let { cartTotal} = await Cart.findOne({
         orderby: user._id,
-    }).populate("products.product")
+    })
 
     //totalAfterDiscount ==> Cart Schema
     //cartTotal from user checkout/ validCoupon checks for validity and take sub property discount
@@ -430,6 +431,9 @@ export const emptyCart = asyncHandler(async (req, res) => {
     res.json(totalAfterDiscount);
   })
 
+
+
+  
  
 
 
