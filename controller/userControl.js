@@ -337,7 +337,7 @@ export const useCart = asyncHandler( async( req, res) => {
         if(alreadyExistInCart){
             alreadyExistInCart.remove()
         };
-        //for each item in the cart and object is created containing listed objects. 
+        //for each item in the cart an object is created containing listed objects. 
         for( let i = 0; i < cart.length; i++) {
             let object = {};
             object.product = cart[i]._id;
@@ -406,7 +406,7 @@ export const emptyCart = asyncHandler(async (req, res) => {
 export const applyCoupon = asyncHandler( async( req, res) => {
     const { coupon } = req.body;
     const { _id } = req.user;
-    //check validity of coupon from the Coupon DB
+    //check validity of coupon from the Coupon DBc
     const validCoupon = await Coupon.findOne({ name: coupon});
     if( validCoupon === null){
         throw new Error("Invalid Coupon")
@@ -430,6 +430,37 @@ export const applyCoupon = asyncHandler( async( req, res) => {
         { new: true});
     res.json(totalAfterDiscount);
   })
+
+
+export const createOrder = asyncHandler( async( req, res) => {
+    const { COD, couponApplied } = req.body;
+    const { _id } = req.user;
+    validateMongoDBId(_id);
+
+    try{
+        //COD enum "cash on delivery thow error"
+        if(!COD) throw new Error ("Create cash order failed");
+        const user = await User.fiindOne(_id);
+        let userCart = await Cart.findOne({ orderby: user._id });
+        let finalAmount = 0;
+
+        if(couponApplied && userCart.totalAfterDiscount){
+            finalAmount = userCart.totalAfterDiscount * 100
+        }else {
+            finalAmount = userCart.cartTotal;
+        }
+    }catch(error){
+        throw new Error(error)
+    }
+});
+
+
+
+
+
+
+
+
 
 
 
