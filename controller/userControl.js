@@ -440,7 +440,7 @@ export const createOrder = asyncHandler( async( req, res) => {
     try{
         //COD enum "cash on delivery thow error"
         if(!COD) throw new Error ("Create cash order failed");
-        const user = await User.fiindOne(_id);
+        const user = await User.findOne(_id);
         let userCart = await Cart.findOne({ orderby: user._id });
         let finalAmount = 0;
 
@@ -452,6 +452,7 @@ export const createOrder = asyncHandler( async( req, res) => {
     }catch(error){
         throw new Error(error)
     }
+    res.json(finalAmount)
 });
 
 
