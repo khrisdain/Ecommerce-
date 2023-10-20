@@ -447,12 +447,15 @@ export const createOrder = asyncHandler( async( req, res) => {
         if(couponApplied && userCart.totalAfterDiscount){
             finalAmount = userCart.totalAfterDiscount * 100
         }else {
-            finalAmount = userCart.cartTotal;
+            finalAmount = userCart.cartTotal * 100
         }
+        let newOrder = await new Order({
+            products: userCart.products
+        })
     }catch(error){
         throw new Error(error)
     }
-    res.json(finalAmount)
+    
 });
 
 
