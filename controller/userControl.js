@@ -1,8 +1,10 @@
+import uniquid from "uniquid";
 import crypto from "crypto"
 import jwt  from "jsonwebtoken";
 import User from "../models/userModel.js";
 import Cart from "../models/cartModel.js";
-import Coupon from "../models/couponModel.js"
+import Order from "../models/orderModel.js"
+import Coupon from "../models/couponModel.js";
 import Product from "../models/productModel.js";
 import asyncHandler from "express-async-handler";
 import { sendEmail }from "./emailController.js"
@@ -432,6 +434,8 @@ export const applyCoupon = asyncHandler( async( req, res) => {
   })
 
 
+
+  //Create A User Order
 export const createOrder = asyncHandler( async( req, res) => {
     const { COD, couponApplied } = req.body;
     const { _id } = req.user;
@@ -449,17 +453,49 @@ export const createOrder = asyncHandler( async( req, res) => {
         }else {
             finalAmount = userCart.cartTotal * 100
         }
+
         let newOrder = await new Order({
-            products: userCart.products
+            products: userCart.products,
+            paymentIntent: {
+                id: uniquid(), //Id based off MAC address
+                method: "COD",
+                amount: finalAmount,
+                status: "Cash on delivery",
+                created: Date.now(),
+                currency: "usd",
+            },
+            orderby: user?._id,
+            orderStatus: "Cash on delivery"
+        }).save()
+
+        //maps userCart?.products into object:item following structure of updateOne
+        let update = userCart.products.map(( item ) => {
+            return{
+                //updateOne serves as key to each property mapped
+                updateOne: {
+                    filter: { _id: item.product._id }, //filters with regards to ID
+                    update: { $inc: { quantity: -item.count, sold: +item.count} },//$include
+                }
+            }
         })
+        const updated = await Product.bulkWrite(update, {});
+        res.json({ message: "success" });
     }catch(error){
         throw new Error(error)
-    }
-    
+    }    
 });
 
-//resting today
 
+const getOrders = asyncHandler( async(req, res) => {
+    const { _id } = req.user;
+    validateMongoDBId(_id)
+
+    try{
+        const userOrders = await Order.findOne({ orderby: _id})
+    }catch(error){
+        throw new Error
+    }
+})
 
 
 
