@@ -454,6 +454,7 @@ export const createOrder = asyncHandler( async( req, res) => {
             finalAmount = userCart.cartTotal * 100
         }
 
+        //saves new document to the Order on the Database
         let newOrder = await new Order({
             products: userCart.products,
             paymentIntent: {
@@ -478,6 +479,7 @@ export const createOrder = asyncHandler( async( req, res) => {
                 }
             }
         })
+        //mongoose bulkWrite: for multiple insert, update and delete Operations
         const updated = await Product.bulkWrite(update, {});
         res.json({ message: "success" });
     }catch(error){
@@ -486,21 +488,43 @@ export const createOrder = asyncHandler( async( req, res) => {
 });
 
 
-const getOrders = asyncHandler( async(req, res) => {
+
+export const getOrders = asyncHandler(async (req, res) => {
     const { _id } = req.user;
-    validateMongoDBId(_id)
-
-    try{
-        const userOrders = await Order.findOne({ orderby: _id})
-    }catch(error){
-        throw new Error
+    validateMongoDBId(_id);
+    try {
+      const userorders = await Order.findOne({ orderby: _id })
+        .populate("products.product")
+        .populate("orderby")
+        .exec();
+      res.json(userorders);
+    } catch (error) {
+      throw new Error(error);
     }
-})
+  });
 
 
 
-
-
+  export const updateOrderStatus = asyncHandler(async (req, res) => {
+    const { status } = req.body;
+    const { id } = req.params;
+    validateMongoDBId(id);
+    try {
+      const updateOrderStatus = await Order.findByIdAndUpdate(
+        id,
+        {
+          orderStatus: status,
+          paymentIntent: {
+            status: status,
+          },
+        },
+        { new: true }
+      );
+      res.json(updateOrderStatus);
+    } catch (error) {
+      throw new Error(error);
+    }
+  });
 
 
 
