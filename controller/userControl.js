@@ -458,7 +458,7 @@ export const createOrder = asyncHandler( async( req, res) => {
         let newOrder = await new Order({
             products: userCart.products,
             paymentIntent: {
-                id: uniquid(), //Id based off MAC address
+                id: uniquid(), //Id based of MAC address
                 method: "COD",
                 amount: finalAmount,
                 status: "Cash on delivery",
